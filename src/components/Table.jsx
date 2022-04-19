@@ -2,8 +2,57 @@ import React, { useContext } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
 
 function Table() {
-  const { data } = useContext(StarWarsContext);
-  console.log(data);
+  const {
+    data, filterByName: { filterByName: { name: nome } } } = useContext(StarWarsContext);
+
+  const allPlanets = (result) => (result.map((
+    { name,
+      rotation_period: rotation,
+      orbital_period: orbital,
+      diameter,
+      climate,
+      gravity,
+      terrain,
+      surface_water: surface,
+      population,
+      films,
+      created,
+      edited,
+      url,
+    },
+  ) => (
+    <tr key={ name }>
+      <td>{name}</td>
+      <td>{rotation}</td>
+      <td>{orbital}</td>
+      <td>{diameter}</td>
+      <td>{climate}</td>
+      <td>{gravity}</td>
+      <td>{terrain}</td>
+      <td>{surface}</td>
+      <td>{population}</td>
+      <td>{films}</td>
+      <td>{created}</td>
+      <td>{edited}</td>
+      <td>{url}</td>
+    </tr>
+  ))
+  );
+
+  const filterByName = (planets) => {
+    const result = planets
+      .filter((planet) => planet.name.toLowerCase()
+        .includes(nome.toLowerCase()));
+    return allPlanets(result);
+  };
+
+  const filters = (planets) => {
+    if (nome.length > 0) {
+      return filterByName(planets);
+    }
+    return allPlanets(planets);
+  };
+
   return (
     <table>
       <thead>
@@ -24,38 +73,7 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        { data.map((
-          { name,
-            rotation_period: rotation,
-            orbital_period: orbital,
-            diameter,
-            climate,
-            gravity,
-            terrain,
-            surface_water: surface,
-            population,
-            films,
-            created,
-            edited,
-            url,
-          },
-        ) => (
-          <tr key={ name }>
-            <td>{name}</td>
-            <td>{rotation}</td>
-            <td>{orbital}</td>
-            <td>{diameter}</td>
-            <td>{climate}</td>
-            <td>{gravity}</td>
-            <td>{terrain}</td>
-            <td>{surface}</td>
-            <td>{population}</td>
-            <td>{films}</td>
-            <td>{created}</td>
-            <td>{edited}</td>
-            <td>{url}</td>
-          </tr>
-        )) }
+        { filters(data) }
       </tbody>
     </table>
   );

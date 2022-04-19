@@ -5,6 +5,11 @@ import StarWarsContext from './StarWarsContext';
 
 function StarWarsProvider({ children }) {
   const [data, setData] = useState([]);
+  const [filterByName, setFilterByName] = useState({
+    filterByName: {
+      name: '',
+    },
+  });
 
   useEffect(() => {
     const fetchApi = async () => {
@@ -18,7 +23,7 @@ function StarWarsProvider({ children }) {
   }, []);
 
   return (
-    <StarWarsContext.Provider value={ { data } }>
+    <StarWarsContext.Provider value={ { data, setFilterByName, filterByName, setData } }>
       {children}
     </StarWarsContext.Provider>
   );
