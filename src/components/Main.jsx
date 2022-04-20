@@ -1,18 +1,13 @@
 import React, { useContext } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
+import Filters from './Filters';
 import Table from './Table';
 
 function Main() {
   const { setFilterByName } = useContext(StarWarsContext);
 
   const handleInput = ({ target }) => {
-    setFilterByName(
-      {
-        filterByName: {
-          name: target.value,
-        },
-      },
-    );
+    setFilterByName({ name: target.value });
   };
   return (
     <main>
@@ -22,6 +17,7 @@ function Main() {
         type="text"
         placeholder="digite um planeta"
       />
+      <Filters />
       <Table />
     </main>
   );

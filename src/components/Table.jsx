@@ -1,9 +1,17 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
 
 function Table() {
   const {
-    data, filterByName: { filterByName: { name: nome } } } = useContext(StarWarsContext);
+    data,
+    filterByNumericValues,
+    filterByName: { name: nome } } = useContext(StarWarsContext);
+
+  const [planetsFiltereds, setPlanetsFiltereds] = useState([]);
+
+  useEffect(() => {
+    setPlanetsFiltereds(data);
+  }, [data]);
 
   const allPlanets = (result) => (result.map((
     { name,
@@ -21,7 +29,7 @@ function Table() {
       url,
     },
   ) => (
-    <tr key={ name }>
+    <tr key={ Math.random() }>
       <td>{name}</td>
       <td>{rotation}</td>
       <td>{orbital}</td>
@@ -53,6 +61,27 @@ function Table() {
     return allPlanets(planets);
   };
 
+  useEffect(() => {
+    filterByNumericValues.map(({ column, comparison, value }) => {
+      if (comparison === 'maior que') {
+        const result = data.filter((planet) => Number(planet[column]) > Number(value));
+        console.log(result);
+        return setPlanetsFiltereds(result);
+      }
+      if (comparison === 'menor que') {
+        const result = data.filter((planet) => Number(planet[column]) < Number(value));
+        console.log(result);
+        return setPlanetsFiltereds(result);
+      }
+      if (comparison === 'igual a') {
+        const result = data.filter((planet) => Number(planet[column]) === Number(value));
+        console.log(result);
+        return setPlanetsFiltereds(result);
+      }
+      return setPlanetsFiltereds(planetsFiltereds);
+    });
+  }, [filterByNumericValues]);
+
   return (
     <table>
       <thead>
@@ -73,7 +102,7 @@ function Table() {
         </tr>
       </thead>
       <tbody>
-        { filters(data) }
+        { filters(planetsFiltereds) }
       </tbody>
     </table>
   );
