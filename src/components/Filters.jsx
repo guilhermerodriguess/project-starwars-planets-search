@@ -1,19 +1,41 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import StarWarsContext from '../context/StarWarsContext';
 
 function Filters() {
   const { setFilterByNumericValues, filterByNumericValues } = useContext(StarWarsContext);
 
   const [filters, setFilters] = useState({
-    column: 'population',
+    column: '',
     comparison: 'maior que',
     value: 0,
   });
+
+  const [columns, setColumns] = useState(['population',
+    'orbital_period', 'diameter', 'rotation_period', 'surface_water']);
+
+  const handleColumnsOptions = (() => {
+    const result = columns
+      .filter((option) => filterByNumericValues
+        .every(({ column }) => option !== column));
+    setColumns(result);
+  });
+
+  useEffect(() => {
+    handleColumnsOptions();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterByNumericValues]);
 
   const addFilter = () => {
     setFilterByNumericValues([
       ...filterByNumericValues, filters,
     ]);
+  };
+
+  const showFilter = () => {
+    const filter = filterByNumericValues.map(({ column, comparison, value }) => (
+      <p key={ Math.random() }>{`${column} ${comparison} ${value}`}</p>
+    ));
+    return filter;
   };
 
   return (
@@ -26,12 +48,18 @@ function Filters() {
           ) }
           id="coluna"
           data-testid="column-filter"
+          value={ filters.column }
         >
-          <option value="population">population</option>
-          <option value="orbital_period">orbital_period</option>
-          <option value="diameter">diameter</option>
-          <option value="rotation_period">rotation_period</option>
-          <option value="surface_water">surface_water</option>
+          { columns
+            .map((option) => (
+              <option
+                value={ option }
+                key={ Math
+                  .random() }
+              >
+                {option}
+              </option>
+            )) }
         </select>
       </label>
       <label htmlFor="operador">
@@ -63,6 +91,9 @@ function Filters() {
       >
         Filtrar
       </button>
+      <div>
+        { showFilter() }
+      </div>
     </div>
   );
 }
