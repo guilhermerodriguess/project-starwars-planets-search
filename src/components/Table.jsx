@@ -62,20 +62,36 @@ function Table() {
   };
 
   useEffect(() => {
+    console.log(`Planetas do estado: ${planetsFiltereds.length}`);
     filterByNumericValues.map(({ column, comparison, value }) => {
       if (comparison === 'maior que') {
+        if (filterByNumericValues.length > 2) {
+          const result = planetsFiltereds
+            .filter((planet) => Number(planet[column]) > Number(value));
+          return setPlanetsFiltereds(result);
+        }
         const result = data.filter((planet) => Number(planet[column]) > Number(value));
-        console.log(result);
+        console.log(`Maior que, planetas no estado: ${planetsFiltereds.length}`);
         return setPlanetsFiltereds(result);
       }
       if (comparison === 'menor que') {
+        if (filterByNumericValues.length > 2) {
+          const result = planetsFiltereds
+            .filter((planet) => Number(planet[column]) > Number(value));
+          return setPlanetsFiltereds(result);
+        }
         const result = data.filter((planet) => Number(planet[column]) < Number(value));
-        console.log(result);
+        console.log(`Menor que, planetas no estado: ${planetsFiltereds.length}`);
         return setPlanetsFiltereds(result);
       }
       if (comparison === 'igual a') {
+        if (filterByNumericValues.length > 2) {
+          const result = planetsFiltereds
+            .filter((planet) => Number(planet[column]) > Number(value));
+          return setPlanetsFiltereds(result);
+        }
         const result = data.filter((planet) => Number(planet[column]) === Number(value));
-        console.log(result);
+        console.log(`Igual, planetas no estado: ${planetsFiltereds.length}`);
         return setPlanetsFiltereds(result);
       }
       return setPlanetsFiltereds(planetsFiltereds);
