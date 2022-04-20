@@ -5,7 +5,7 @@ function Filters() {
   const { setFilterByNumericValues, filterByNumericValues } = useContext(StarWarsContext);
 
   const [filters, setFilters] = useState({
-    column: '',
+    column: 'population',
     comparison: 'maior que',
     value: 0,
   });
